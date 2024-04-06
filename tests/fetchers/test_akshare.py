@@ -1,6 +1,7 @@
 import unittest
-from omega.fetchers.akshare import fetch_stock_list
+from omega.fetchers.akshare import fetch_stock_list, fetch_calendar
 import datetime
+
 
 class AkshareTest(unittest.TestCase):
     def test_fetch_stock_list(self):
@@ -12,3 +13,8 @@ class AkshareTest(unittest.TestCase):
 
         filter = df.code == "000001.SH"
         self.assertEqual(df[filter].iloc[0]["alias"], "上证指数")
+
+    def test_fetch_calendar(self):
+        calendar = fetch_calendar()
+        self.assertEqual(calendar.iloc[0], datetime.date(2005, 1, 4))
+        self.assertTrue(calendar.iloc[-1] > datetime.datetime.now().date())

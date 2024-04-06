@@ -26,7 +26,9 @@ async def _rebuild_min_level_unclosed_bars():
             first_frame = bars[0]["frame"].item()
             if no_first_bars > 50:
                 logger.warning("超过50支个股在缓存中没有09:31的分钟线，zillionare刚安装，还没来得及同步？")
-                DingTalkMessage.text("重建分钟级缓存数据时，超过50支个股在缓存中没有09:31的分钟线，zillionare刚安装，还没来得及同步？")
+                DingTalkMessage.text(
+                    "重建分钟级缓存数据时，超过50支个股在缓存中没有09:31的分钟线，zillionare刚安装，还没来得及同步？"
+                )
                 return False
             if first_frame.hour() != 9 and first_frame.minute() != 31:
                 no_first_bars += 1

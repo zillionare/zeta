@@ -53,7 +53,6 @@ quotes_fetchers:
 zarr:
   store_path: /zillionare/boards.zarr
 
-
 notify:
     mail_from: ${MAIL_FROM}
     mail_to:

@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 # @Author   : xiaohuzi
 # @Time     : 2022-01-11 10:24
+import datetime
+
+EPOCH = datetime.date(2005, 1, 4)
 TASK_PREFIX = "master.task"
 TASK_SECS_PREFIX = "master.task.secs"
 

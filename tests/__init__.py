@@ -7,11 +7,18 @@ import cfg4py
 import numpy as np
 from coretypes import FrameType, bars_dtype
 from numpy.testing import assert_array_almost_equal, assert_array_equal
-
-from omega.config import get_config_dir
+from redis import asyncio as aioredis
 
 cfg = cfg4py.get_instance()
 logger = logging.getLogger(__name__)
+
+from omicron import tf
+
+def get_config_dir():
+    return os.path.join(os.path.dirname(__file__), "config")
+
+def init_calendar():
+    tf.service_degrade()
 
 
 async def clear_cache(dsn):
@@ -46,8 +53,8 @@ async def set_calendar_data(redis):
         trade_days = pickle.load(f)
 
         for ft in [FrameType.WEEK, FrameType.MONTH, FrameType.QUARTER, FrameType.YEAR]:
-            days = TimeFrame.resample_frames(trade_days, ft)
-            frames = [TimeFrame.date2int(x) for x in days]
+            days = tf.resample_frames(trade_days, ft)
+            frames = [tf.date2int(x) for x in days]
 
             key = f"calendar:{ft.value}"
             pl = redis.pipeline()
@@ -55,7 +62,7 @@ async def set_calendar_data(redis):
             pl.rpush(key, *frames)
             await pl.execute()
 
-        frames = [TimeFrame.date2int(x) for x in trade_days]
+        frames = [tf.date2int(x) for x in trade_days]
         key = f"calendar:{FrameType.DAY.value}"
         pl = redis.pipeline()
         pl.delete(key)
@@ -125,25 +132,6 @@ def dir_test_home():
 
     home = os.path.dirname(__file__)
     return Path(home)
-
-
-async def reset_influxdb():
-    """clean up influxdb"""
-
-    from omicron.dal.influx.influxclient import InfluxClient
-
-    # create influxdb client
-    url, token, bucket, org = (
-        cfg.influxdb.url,
-        cfg.influxdb.token,
-        cfg.influxdb.bucket_name,
-        cfg.influxdb.org,
-    )
-    client = InfluxClient(url, token, bucket, org)
-
-    await client.delete_bucket()
-    await client.create_bucket()
-    return client
 
 
 def mock_jq_data(filename: str):

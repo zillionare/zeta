@@ -79,9 +79,8 @@ class Haystore(object):
             sec: 待更新复权因子的证券代码
             factors: 以日期为索引，复权因子为值的Series
         """
-        
+
         for dt, factor in factors.items():
             sql = "alter table bars_day update factor = %(v1)s where symbol = %(v2)s and frame = %(v3)s"
 
             self.client.command(sql, {"v1": factor, "v2": sec, "v3": dt})
-            

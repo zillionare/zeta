@@ -11,10 +11,11 @@ import cfg4py
 from pyemit import emit
 from unittest import mock
 
+
 @mock.patch(
-        "omega.master.tasks.synctask.QuotaMgmt.check_quota",
-        return_value=((True, 1000000, 500000)),
-    )
+    "omega.master.tasks.synctask.QuotaMgmt.check_quota",
+    return_value=((True, 1000000, 500000)),
+)
 async def sync_minute_bars(dummy):
     name = "minute"
     timeout = 60
@@ -32,12 +33,14 @@ async def sync_minute_bars(dummy):
     await task.cleanup()
     await task.run()
 
+
 async def main():
     cfg = cfg4py.init("/root/zillionare/omega/config")
     await init()
     await emit.start(emit.Engine.REDIS, dsn=cfg.redis.dsn)
     await sync_minute_bars()
 
+
 import asyncio
+
 asyncio.run(main())
- 

@@ -10,7 +10,8 @@
     ".vscode",
     "docs",
     "**/__pycache__",
-    "zillionare_omega.egg-info"
+    "zillionare_omega.egg-info",
+    "**/tests/**"
   ],
 
   "ignore": [

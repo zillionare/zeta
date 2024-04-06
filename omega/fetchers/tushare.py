@@ -109,5 +109,4 @@ def fetch_stock_bars_daily(codes: List[str], start: datetime.date, end: datetime
         "suspend_type": "suspended",
         "turnover_rate": "turnover"
     })
-
-    df["suspended"] = df.suspended.astype(int)
+    return df
